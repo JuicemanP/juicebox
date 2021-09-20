@@ -205,6 +205,15 @@ async function getPostById(postId) {
       [postId]
     );
 
+    // THIS IS NEW
+    if (!post) {
+      throw {
+        name: "PostNotFoundError",
+        message: "Could not find a post with that postId",
+      };
+    }
+    // NEWNESS ENDS HERE
+
     const { rows: tags } = await client.query(
       `
         SELECT tags.*
@@ -360,17 +369,38 @@ async function getAllTags() {
   }
 }
 
+async function getUserByUsername(username) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+        SELECT *
+        FROM users
+        WHERE username=$1;
+      `,
+      [username]
+    );
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   client,
   createUser,
   updateUser,
   getAllUsers,
   getUserById,
+  getUserByUsername,
   createPost,
   updatePost,
   getAllPosts,
   getPostsByUser,
   getPostsByTagName,
+  getPostById,
   createTags,
   getAllTags,
   createPostTag,
