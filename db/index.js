@@ -1,7 +1,7 @@
 const { Client } = require("pg"); // imports the pg module
 
 const client = new Client({
-  host: "localhost",
+  host: "https://gentle-taiga-51090.herokuapp.com" || "localhost",
   port: "5432",
   database: "juicebox_dev",
   user: "postgres",
